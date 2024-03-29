@@ -5,10 +5,20 @@ import pyperclip
 bot_pause = 2
 py.PAUSE = bot_pause
 
-ticker = "BBAS3.SA"
-nome = "Clisamax"
-email_destino = "clisamax.gomes.dev@gmail.com"
+# ticker = "BBAS3.SA"
+# "clisamax.gomes.dev@gmail.com"
 
+def input_ticker():
+    ticker = input("digite o ticker: ")
+    return ticker
+
+def input_nome_email():
+    nome = input("digite o nome: ")
+    return nome
+
+def input_email():
+    email_destino = input("digite o email: ")
+    return email_destino
 
 def fetch_stock_data(ticker, period="6mo"):
     stock = yf.Ticker(ticker)
@@ -28,7 +38,7 @@ def buscar_atual(fechamento):
     return fechamento.iloc[-1]
 
 
-def conteúdo_email(ticker, max_price, min_price, atual_price):
+def conteúdo_email(ticker,nome ,max_price, min_price, atual_price):
     mensagem = f"""
         Bom dia,
 
@@ -54,7 +64,7 @@ def abrir_email(nav):
     py.press("enter")
 
 
-def escrever_email(mensagem_email):
+def escrever_email(mensagem_email, ticker, email_destino):
     py.click(58, 170)
     py.write(email_destino)
     py.press("enter")
@@ -66,16 +76,19 @@ def escrever_email(mensagem_email):
     py.click(1899, 998)
 
 
-def main(ticker):
+def main():
+    ticker = input_ticker()
+    nome = input_nome_email()
+    email_destino = input_email()
     fechamento = fetch_stock_data(ticker)
     fechamento = round(fechamento, 2)
     max_price = buscar_maxima(fechamento)
     min_price = buscar_minima(fechamento)
     atual_price = buscar_atual(fechamento)
-    mensagem_email = conteúdo_email(ticker, max_price, min_price, atual_price)
+    mensagem_email = conteúdo_email(ticker ,nome ,max_price, min_price, atual_price)
     abrir_email("edge")
-    escrever_email(mensagem_email)
+    escrever_email(mensagem_email, ticker, email_destino)
 
 
 if __name__ == "__main__":
-    main(ticker)
+    main()
